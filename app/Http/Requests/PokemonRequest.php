@@ -17,8 +17,8 @@ class PokemonRequest extends FormRequest
     public function rules()
     {
         return [
-           // "nombre" => "required|unique:pokemon|string",
-          "despide"=>"required|boolean"
+         "nombre" => "required|unique:pokemon|string",
+         // "despide"=>"required|boolean"
         ];
     }
 
