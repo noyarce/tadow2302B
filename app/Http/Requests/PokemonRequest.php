@@ -17,6 +17,7 @@ class PokemonRequest extends FormRequest
     public function rules()
     {
         return [
+         "id"=>"nullable|exists:pokemon,id",
          "nombre" => "required|unique:pokemon|string",
          // "despide"=>"required|boolean"
         ];
@@ -43,7 +44,7 @@ class PokemonRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json($validator->errors()->all(), Response::HTTP_I_AM_A_TEAPOT)
+        throw new HttpResponseException(response()->json($validator->errors()->all(), Response::HTTP_BAD_REQUEST)
         );
     }
 }

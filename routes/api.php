@@ -10,4 +10,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/hola', [PokemonController::class, 'hola']);
+Route::post('actualizarPoke',[PokemonController::class, 'actualizarPokemon']);
 
