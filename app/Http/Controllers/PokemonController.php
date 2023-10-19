@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PokemonRequest;
-use App\Models\Pokemon;
+use App\Http\Requests\{ListarPokeRequest,PokemonRequest };
 use App\Repositories\PokemonRepository;
 class PokemonController extends Controller
 {    
@@ -13,11 +12,19 @@ class PokemonController extends Controller
         $this->pokemonRepository = $pokemonRepository;
     }
     
-    public function hola(PokemonRequest $request){
+    public function registrarPokemon(PokemonRequest $request){
        return $this->pokemonRepository->registrarPokemon($request);
     }
 
     public function actualizarPokemon(PokemonRequest $request){
         return $this->pokemonRepository->actualizarPokemon($request);
+     }
+
+     public function listarPokemones(ListarPokeRequest $request){
+        return $this->pokemonRepository->listarPokemones($request);
+     }
+
+     public function EliminarPokemon(ListarPokeRequest $request){
+        return $this->pokemonRepository->eliminarPokemon($request);
      }
 }
