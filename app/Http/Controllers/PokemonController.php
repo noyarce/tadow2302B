@@ -27,4 +27,8 @@ class PokemonController extends Controller
      public function EliminarPokemon(ListarPokeRequest $request){
         return $this->pokemonRepository->eliminarPokemon($request);
      }
+
+     public function CargarPokemon(){
+      return $this->pokemonRepository->cargarPokemones();
+     }
 }

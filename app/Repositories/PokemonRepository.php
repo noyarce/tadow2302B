@@ -97,8 +97,15 @@ class PokemonRepository
         try{
           
             $pokemonService = new PokemonService;
-            $pokemon= $pokemonService->cargarPokemones();
-            return response()->json(["pokemon" => $pokemon], Response::HTTP_OK);
+            $pokemones= $pokemonService->cargarPokemones();
+
+            foreach ($pokemones['body']['results'] as $pokemon){
+                Log::info(["pokemon"=> $pokemon]);
+            }
+
+
+
+            return response()->json(["pokemon" => $pokemones], Response::HTTP_OK);
         }catch(Exception $e){
             Log::info(["error" => $e->getMessage(),
             "linea"=> $e->getLine(), 

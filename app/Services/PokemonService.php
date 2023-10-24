@@ -14,7 +14,7 @@ class PokemonService{
 
 
             if($response->successful()){
-                return ["body"=>$response->body(), "status"=> $response->status()];
+                return ["body"=>$response->json(), "status"=> $response->status()];
             }
             if($response->failed()){
                 return ["body"=>"fallo de informacion", "status"=> $response->status()];
