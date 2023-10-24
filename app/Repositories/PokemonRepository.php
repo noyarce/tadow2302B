@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Pokemon;
 use App\Models\Region;
+use App\Services\PokemonService;
 use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -14,7 +15,6 @@ class PokemonRepository
     {
         try {
             $region= Region::where('reg_nombre', $request->region)->first();
-            Log::info(["region"=> $region]);
 
             $pokemon = new Pokemon();
             $pokemon->nombre = $request->nombre;
@@ -77,6 +77,27 @@ class PokemonRepository
             $pokemon= Pokemon::find($request->id);
             $pokemon->delete();
             
+            return response()->json(["pokemon" => $pokemon], Response::HTTP_OK);
+        }catch(Exception $e){
+            Log::info(["error" => $e->getMessage(),
+            "linea"=> $e->getLine(), 
+            "file"=> $e->getFile(),
+            "metodo"=> __METHOD__]);
+
+            return response()->json([
+                "error" => $e->getMessage(),
+                 "linea"=> $e->getLine(), 
+                 "file"=> $e->getFile(),
+                 "metodo"=> __METHOD__
+        ], Response::HTTP_BAD_REQUEST);
+        }  
+    }
+
+    public function cargarPokemones(){
+        try{
+          
+            $pokemonService = new PokemonService;
+            $pokemon= $pokemonService->cargarPokemones();
             return response()->json(["pokemon" => $pokemon], Response::HTTP_OK);
         }catch(Exception $e){
             Log::info(["error" => $e->getMessage(),

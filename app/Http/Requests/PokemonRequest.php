@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 
 class PokemonRequest extends FormRequest
 {
-        /**
+    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
@@ -17,11 +17,9 @@ class PokemonRequest extends FormRequest
     public function rules()
     {
         return [
-         "id"=>"nullable|exists:pokemon,id",
-         "nombre" => "required|unique:pokemon|string",
-        // "region_id"=>"required|exists:regions,id"
-        "region"=>"required|exists:regions,reg_nombre"
-         // "despide"=>"required|boolean"
+            "id" => "nullable|exists:pokemon,id",
+            "nombre" => "required|unique:pokemon|string",
+            "region" => "required|exists:regions,reg_nombre"
         ];
     }
 
@@ -46,7 +44,8 @@ class PokemonRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json($validator->errors()->all(), Response::HTTP_BAD_REQUEST)
+        throw new HttpResponseException(
+            response()->json($validator->errors()->all(), Response::HTTP_BAD_REQUEST)
         );
     }
 }
