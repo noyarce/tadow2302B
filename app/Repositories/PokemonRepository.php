@@ -107,8 +107,8 @@ class PokemonRepository
     {
         try {
             for ($i = 1; $i <= 9; $i++) {
-             $this->cargaPokemonPorRegion($i);
-             //CargaPokemonesJob::dispatch($i);
+              //$this->cargaPokemonPorRegion($i);
+             CargaPokemonesJob::dispatch($i);
             }
 
             return response()->json(["ok"], Response::HTTP_OK);
