@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Jobs\CargaPokemonesJob;
 use App\Models\Pokemon;
 use App\Models\Region;
 use App\Services\PokemonService;
@@ -104,25 +105,13 @@ class PokemonRepository
 
     public function cargarPokemones()
     {
-        try {           
+        try {
             for ($i = 1; $i <= 9; $i++) {
-                $pokemonServiceRegion = new PokemonService;
-                $pokemones = $pokemonServiceRegion->CargarRegiones($i);
-                $region = new Region();
-                $region->reg_nombre = $pokemones['body']['main_region']['name'];
-                $region->save();
-                   foreach ($pokemones['body']['pokemon_species'] as $pokemon){
-                       $poke = new Pokemon();
-                       $poke->nombre = $pokemon['name'];
-                       $poke->region_id = $region->id;
-                       $poke->save();
-                   }
+             $this->cargaPokemonPorRegion($i);
+             //CargaPokemonesJob::dispatch($i);
             }
 
-
-
-
-            return response()->json(["pokemon" => $pokemones], Response::HTTP_OK);
+            return response()->json(["ok"], Response::HTTP_OK);
         } catch (Exception $e) {
             Log::info([
                 "error" => $e->getMessage(),
@@ -137,6 +126,21 @@ class PokemonRepository
                 "file" => $e->getFile(),
                 "metodo" => __METHOD__
             ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function cargaPokemonPorRegion($id)
+    {
+        $pokemonServiceRegion = new PokemonService;
+        $pokemones = $pokemonServiceRegion->CargarRegiones($id);
+        $region = new Region();
+        $region->reg_nombre = $pokemones['body']['main_region']['name'];
+        $region->save();
+        foreach ($pokemones['body']['pokemon_species'] as $pokemon) {
+            $poke = new Pokemon();
+            $poke->nombre = $pokemon['name'];
+            $poke->region_id = $region->id;
+            $poke->save();
         }
     }
 }
