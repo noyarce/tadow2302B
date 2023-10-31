@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Jobs\CargaPokemonesJob;
 use App\Models\Pokemon;
 use App\Models\Region;
+use App\Models\TipoPokemon;
 use App\Services\PokemonService;
 use Exception;
 use Illuminate\Http\Response;
@@ -137,10 +138,40 @@ class PokemonRepository
         $region->reg_nombre = $pokemones['body']['main_region']['name'];
         $region->save();
         foreach ($pokemones['body']['pokemon_species'] as $pokemon) {
+
+            Log::info(["pokemon a revisar "=> $pokemon]);
+
+            $idPokedex = str_replace('https://pokeapi.co/api/v2/pokemon-species/','', $pokemon['url']);
+            
+            $pokemonServiceTipo = new PokemonService;
+            $pokemonTipo = $pokemonServiceTipo->CargarPokemonIndividual($idPokedex);
+
+            Log::info([" poke x tipo"=> $pokemonTipo]);
+         
+            $tipoUno = TipoPokemon::where('tip_nombre', $pokemonTipo['body']['types'][0]['type']['name'])->first();
+            if(!$tipoUno){
+                $tipoUno = new TipoPokemon();
+                $tipoUno->tip_nombre = $pokemonTipo['body']['types'][0]['type']['name'];
+                $tipoUno->save();
+            }
+            if(isset($pokemonTipo['body']['type'][1])){
+                $tipoDos = TipoPokemon::where('tip_nombre', $pokemonTipo['body']['types'][1]['type']['name'])->first();
+                if(!$tipoDos){
+                    $tipoDos = new TipoPokemon();
+                    $tipoDos->tip_nombre = $pokemonTipo['body']['types'][0]['type']['name'];
+                    $tipoDos->save();
+                }
+            }
+
             $poke = new Pokemon();
             $poke->nombre = $pokemon['name'];
             $poke->region_id = $region->id;
+            $poke->tipo_uno_id =$tipoUno->id;
+            $poke->tipo_dos_id = isset($pokemonTipo['body']['type'][1]) && $tipoDos->id ;
             $poke->save();
         }
     }
+
+
+
 }
