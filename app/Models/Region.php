@@ -10,4 +10,7 @@ class Region extends Model
     use HasFactory;
     protected $table = 'regions';
 
+    public function pokemon(){
+        return $this->hasMany(Pokemon::class);
+    }
 }

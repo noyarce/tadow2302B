@@ -60,8 +60,7 @@ class PokemonRepository
     public function listarPokemones($request)
     {
         try {
-            $pokemon = Pokemon::whereIn('id', [3, 4, 5, 6, 7])
-                ->get();
+            $pokemon = Pokemon::whereIn('id', [3, 4, 5, 6, 7])->get();
             return response()->json(["pokemon" => $pokemon], Response::HTTP_OK);
         } catch (Exception $e) {
             Log::info([
@@ -146,7 +145,7 @@ class PokemonRepository
             $pokemonServiceTipo = new PokemonService;
             $pokemonTipo = $pokemonServiceTipo->CargarPokemonIndividual($idPokedex);
 
-            Log::info([" poke x tipo"=> $pokemonTipo]);
+            Log::info([" poke x tipo"=> $pokemonTipo['body']['types'][0]['type']['name']]);
          
             $tipoUno = TipoPokemon::where('tip_nombre', $pokemonTipo['body']['types'][0]['type']['name'])->first();
             if(!$tipoUno){
@@ -154,11 +153,13 @@ class PokemonRepository
                 $tipoUno->tip_nombre = $pokemonTipo['body']['types'][0]['type']['name'];
                 $tipoUno->save();
             }
-            if(isset($pokemonTipo['body']['type'][1])){
+            if(isset($pokemonTipo['body']['types'][1])){
+                Log::info([" poke x tipo"=> $pokemonTipo['body']['types'][1]['type']['name']]);
+
                 $tipoDos = TipoPokemon::where('tip_nombre', $pokemonTipo['body']['types'][1]['type']['name'])->first();
                 if(!$tipoDos){
                     $tipoDos = new TipoPokemon();
-                    $tipoDos->tip_nombre = $pokemonTipo['body']['types'][0]['type']['name'];
+                    $tipoDos->tip_nombre = $pokemonTipo['body']['types'][1]['type']['name'];
                     $tipoDos->save();
                 }
             }
@@ -167,7 +168,7 @@ class PokemonRepository
             $poke->nombre = $pokemon['name'];
             $poke->region_id = $region->id;
             $poke->tipo_uno_id =$tipoUno->id;
-            $poke->tipo_dos_id = isset($pokemonTipo['body']['type'][1]) && $tipoDos->id ;
+            $poke->tipo_dos_id = isset($pokemonTipo['body']['types'][1]) ? $tipoDos->id : null;
             $poke->save();
         }
     }
