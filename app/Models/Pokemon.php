@@ -13,4 +13,11 @@ class Pokemon extends Model
     public function region(){
         return $this->belongsTo(Region::class, 'region_id');
     }
+    public function tipo_uno(){
+        return $this->belongsTo(TipoPokemon::class, 'tipo_uno_id');
+    }
+    public function tipo_dos(){
+        return $this->belongsTo(TipoPokemon::class, 'tipo_dos_id');
+    }
+
 }

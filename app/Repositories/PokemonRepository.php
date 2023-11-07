@@ -60,7 +60,38 @@ class PokemonRepository
     public function listarPokemones($request)
     {
         try {
-            $pokemon = Pokemon::whereIn('id', [3, 4, 5, 6, 7])->get();
+           
+            // $pokemon = Pokemon::where('nombre', 'like', '%'.$request->nombre.'%')
+            // ->with(['region:id,reg_nombre','tipo_uno','tipo_dos'])->get();
+
+           // $pokemon= Pokemon::where('num_pokedex', $request->num_pokedex)->get();
+            
+           // $pokemon = Pokemon::whereHas('region', function($q) use($request){
+           //     $q->where('reg_nombre',$request->region);
+           // })
+           // ->with('region:id,reg_nombre')
+           // ->orderBy('num_pokedex','DESC')
+           // ->get();
+
+            $pokemon= Pokemon::when(isset($request->num_pokedex), function($q) use ($request) {
+                $q->where('num_pokedex',$request->num_pokedex);
+            })
+            ->when(isset($request->nombre), function ($q2) use ($request){
+                $q2->where('nombre', 'like', '%'.$request->nombre.'%');
+            })
+            ->get();
+
+            //$pokemon = Pokemon::join('regions', 'regions.id', '=','pokemon.region_id')
+            //            ->where('reg_nombre',$request->region)
+            //            ->get();
+
+            //$pokemon = Pokemon::whereHas('tipo_uno', function ($q) use($request){
+            //    $q->where('tip_nombre', $request->tipo);
+            //})
+            //->orwherehas('tipo_dos', function($q2) use($request){
+            //    $q2->where('tip_nombre', $request->tipo);
+            //})->with(['region:id,reg_nombre','tipo_uno','tipo_dos'])->get();
+            
             return response()->json(["pokemon" => $pokemon], Response::HTTP_OK);
         } catch (Exception $e) {
             Log::info([
@@ -140,8 +171,12 @@ class PokemonRepository
 
             Log::info(["pokemon a revisar "=> $pokemon]);
 
+            // $pokemon['url'] equivale a : 'https://pokeapi.co/api/v2/pokemon-species/???/'
             $idPokedex = str_replace('https://pokeapi.co/api/v2/pokemon-species/','', $pokemon['url']);
-            
+            // $idPokedex -> ???/
+
+            $idPokedex= str_replace('/','', $idPokedex);
+            // $idPokedex -> ??? 
             $pokemonServiceTipo = new PokemonService;
             $pokemonTipo = $pokemonServiceTipo->CargarPokemonIndividual($idPokedex);
 
@@ -169,6 +204,7 @@ class PokemonRepository
             $poke->region_id = $region->id;
             $poke->tipo_uno_id =$tipoUno->id;
             $poke->tipo_dos_id = isset($pokemonTipo['body']['types'][1]) ? $tipoDos->id : null;
+            $poke->num_pokedex = (int)$idPokedex;
             $poke->save();
         }
     }
