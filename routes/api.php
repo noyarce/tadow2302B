@@ -12,6 +12,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('registrarPokemon', [PokemonController::class, 'registrarPokemon']);
 Route::post('actualizarPoke',[PokemonController::class, 'actualizarPokemon']);
 Route::get('listarPoke',[PokemonController::class, 'listarPokemones']);
+Route::get('pokemonesAll',[PokemonController::class, 'listarPokemones']);
 Route::get('eliminarPoke',[PokemonController::class, 'EliminarPokemon']);
 Route::get('cargarPokes',[PokemonController::class, 'CargarPokemon']);
 

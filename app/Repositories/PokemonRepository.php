@@ -60,7 +60,9 @@ class PokemonRepository
     public function listarPokemones($request)
     {
         try {
-           
+           $pokemon = Pokemon::with(['region:id,reg_nombre','tipo_uno','tipo_dos'])
+           ->orderBy('num_pokedex','ASC')
+           ->get();
             // $pokemon = Pokemon::where('nombre', 'like', '%'.$request->nombre.'%')
             // ->with(['region:id,reg_nombre','tipo_uno','tipo_dos'])->get();
 
@@ -70,16 +72,16 @@ class PokemonRepository
            //     $q->where('reg_nombre',$request->region);
            // })
            // ->with('region:id,reg_nombre')
-           // ->orderBy('num_pokedex','DESC')
+           // 
            // ->get();
-
-            $pokemon= Pokemon::when(isset($request->num_pokedex), function($q) use ($request) {
-                $q->where('num_pokedex',$request->num_pokedex);
-            })
-            ->when(isset($request->nombre), function ($q2) use ($request){
-                $q2->where('nombre', 'like', '%'.$request->nombre.'%');
-            })
-            ->get();
+//
+           // $pokemon= Pokemon::when(isset($request->num_pokedex), function($q) use ($request) {
+           //     $q->where('num_pokedex',$request->num_pokedex);
+           // })
+           // ->when(isset($request->nombre), function ($q2) use ($request){
+           //     $q2->where('nombre', 'like', '%'.$request->nombre.'%');
+           // })
+           // ->get();
 
             //$pokemon = Pokemon::join('regions', 'regions.id', '=','pokemon.region_id')
             //            ->where('reg_nombre',$request->region)
