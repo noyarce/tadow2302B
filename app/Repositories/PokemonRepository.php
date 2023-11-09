@@ -60,9 +60,17 @@ class PokemonRepository
     public function listarPokemones($request)
     {
         try {
-           $pokemon = Pokemon::with(['region:id,reg_nombre','tipo_uno','tipo_dos'])
+          
+           if(isset($request->limit)){
+            $pokemon = Pokemon::with(['region:id,reg_nombre','tipo_uno','tipo_dos'])
+           ->orderBy('num_pokedex','ASC')
+           ->take($request->limit)
+           ->get();
+           }else{ 
+            $pokemon = Pokemon::with(['region:id,reg_nombre','tipo_uno','tipo_dos'])
            ->orderBy('num_pokedex','ASC')
            ->get();
+            }
             // $pokemon = Pokemon::where('nombre', 'like', '%'.$request->nombre.'%')
             // ->with(['region:id,reg_nombre','tipo_uno','tipo_dos'])->get();
 
