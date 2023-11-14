@@ -39,3 +39,28 @@ luego instalar predis. (libreria de redis para conectar con laravel)
 
 composer require predis/predis
 
+
+_______________________
+
+
+composer require laravel/passport
+
+php artisan migrate
+php artisan passport:install
+
+-->
+config auth
+
+ 'guards' => [
+       ...
+
+        'api' => [
+            'driver' => 'passport', // <---
+            'provider' => 'users',
+        ]
+        ... 
+
+
+php artisan make: authController. loginRequest, signuprequest
+
+"Accept"=>"application/json"
