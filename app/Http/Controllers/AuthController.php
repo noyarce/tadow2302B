@@ -18,9 +18,8 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password)
         ]);
-
         return response()->json([
-            'message' => 'Successfully created user!'
+            'message' => 'Usuario registrado!'
         ], 201);
     }
   
@@ -39,6 +38,10 @@ class AuthController extends Controller
         $token = $tokenResult->token;
         if ($request->remember_me)
             $token->expires_at = Carbon::now()->addWeeks(1);
+        else{
+            $token->expires_at = Carbon::now()->addDays(2);
+
+        }
         $token->save();
 
         return response()->json([

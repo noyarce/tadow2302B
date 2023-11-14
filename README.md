@@ -63,4 +63,7 @@ config auth
 
 php artisan make: authController. loginRequest, signuprequest
 
+
+cuando prueben en su local con postman, en los headers, cambiar el accept--->
+
 "Accept"=>"application/json"
