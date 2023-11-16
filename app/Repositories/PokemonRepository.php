@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Jobs\CargaPokemonesJob;
+use App\Models\Pokedex;
 use App\Models\Pokemon;
 use App\Models\Region;
 use App\Models\TipoPokemon;
@@ -220,5 +221,49 @@ class PokemonRepository
     }
 
 
+    public function registrarPokedex($request){
+        try {
+           $pokemon = new Pokedex();
+           $pokemon->pokemon_id = $request->pokemon_id;
+           $pokemon->usuario_id = $request->usuario_id;
+
+            return response()->json(["ok"], Response::HTTP_OK);
+        } catch (Exception $e) {
+            Log::info([
+                "error" => $e->getMessage(),
+                "linea" => $e->getLine(),
+                "file" => $e->getFile(),
+                "metodo" => __METHOD__
+            ]);
+
+            return response()->json([
+                "error" => $e->getMessage(),
+                "linea" => $e->getLine(),
+                "file" => $e->getFile(),
+                "metodo" => __METHOD__
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function random(){
+        try {
+           $pokemon= Pokemon::(); // corregir para random
+             return response()->json(["pokemon"=> $pokemon], Response::HTTP_OK);
+         } catch (Exception $e) {
+             Log::info([
+                 "error" => $e->getMessage(),
+                 "linea" => $e->getLine(),
+                 "file" => $e->getFile(),
+                 "metodo" => __METHOD__
+             ]);
+ 
+             return response()->json([
+                 "error" => $e->getMessage(),
+                 "linea" => $e->getLine(),
+                 "file" => $e->getFile(),
+                 "metodo" => __METHOD__
+             ], Response::HTTP_BAD_REQUEST);
+         }
+    }
 
 }

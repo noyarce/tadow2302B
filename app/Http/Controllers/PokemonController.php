@@ -33,5 +33,13 @@ class PokemonController extends Controller
      public function CargarPokemon(){
       return $this->pokemonRepository->cargarPokemones();
      }
+
+     public function pokeRandom() {
+      return $this->pokemonRepository->random();
+     }
+
+     public function registrarPokedex(Request $request){
+      return $this->pokemonRepository->registrarPokedex($request);
+     }
 }
 
