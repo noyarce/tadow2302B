@@ -245,9 +245,10 @@ class PokemonRepository
         }
     }
 
-    public function random(){
+    public function random($request){
         try {
-           $pokemon= Pokemon::(); // corregir para random
+            Log::info(["request"=> $request->user()]);
+           $pokemon= Pokemon::with(['region', 'tipo_uno', 'tipo_dos'])->inRandomOrder()->first(); 
              return response()->json(["pokemon"=> $pokemon], Response::HTTP_OK);
          } catch (Exception $e) {
              Log::info([
