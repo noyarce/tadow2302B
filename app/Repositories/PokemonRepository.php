@@ -223,9 +223,14 @@ class PokemonRepository
 
     public function registrarPokedex($request){
         try {
+
+            $usuario = $request->user();      
+                  Log::info(["usuario"=> $usuario->id]);
+
            $pokemon = new Pokedex();
            $pokemon->pokemon_id = $request->pokemon_id;
-           $pokemon->usuario_id = $request->usuario_id;
+           $pokemon->usuario_id = $request->user()->id;
+            $pokemon->save();
 
             return response()->json(["ok"], Response::HTTP_OK);
         } catch (Exception $e) {

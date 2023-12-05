@@ -67,3 +67,37 @@ php artisan make: authController. loginRequest, signuprequest
 cuando prueben en su local con postman, en los headers, cambiar el accept--->
 
 "Accept"=>"application/json"
+
+
+_______________________________________________________
+
+Login con Passport 
+
+https://programacionymas.com/blog/api-rest-laravel-passport
+
+
+Controller:
+https://laravel.com/docs/9.x/validation#quick-defining-the-routes
+
+migraciones: 
+https://laravel.com/docs/9.x/migrations#main-content
+
+
+
+Request: 
+https://laravel.com/docs/9.x/validation#form-request-validation
+https://laravel.com/docs/9.x/validation#customizing-the-error-messages
+https://laravel.com/docs/9.x/validation#customizing-the-validation-attributes
+
+reglas de validacion disponibles
+https://laravel.com/docs/9.x/validation#available-validation-rules
+
+
+http client:
+https://laravel.com/docs/9.x/requests
+
+Comandos:
+https://laravel.com/docs/9.x/artisan#writing-commands
+
+jobs: 
+https://laravel.com/docs/9.x/queues#creating-jobs

@@ -14,7 +14,7 @@ class PokemonController extends Controller
         $this->pokemonRepository = $pokemonRepository;
     }
     
-    public function registrarPokemon(PokemonRequest $request){
+    public function registrarPokemon(Request $request){
        return $this->pokemonRepository->registrarPokemon($request);
     }
 

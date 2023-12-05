@@ -12,16 +12,16 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('logout', [AuthController::class, 'logout']);
-    Route::get('user', [AuthController::class, 'user']);  
-    Route::get('pokemonesAll', [PokemonController::class, 'listarPokemones']);
+    Route::get('user', [AuthController::class, 'user']);   
     Route::post('registrarPokedex',[PokemonController::class, 'registrarPokedex']);
     Route::get('random',[PokemonController::class, 'pokeRandom']);
+    Route::get('pokemonesAll', [PokemonController::class, 'listarPokemones']);
 
 });
 
 Route::group(['prefix' => 'poke'], function () {
 
-    Route::post('registrarPokemon', [PokemonController::class, 'registrarPokemon']);
+  
     Route::post('actualizarPoke', [PokemonController::class, 'actualizarPokemon']);
     Route::get('listarPoke', [PokemonController::class, 'listarPokemones']);
     Route::get('pokemonesAll', [PokemonController::class, 'listarPokemones']);
@@ -30,3 +30,4 @@ Route::group(['prefix' => 'poke'], function () {
 
 
 });
+  Route::post('registrarPokemon', [PokemonController::class, 'registrarPokemon']);

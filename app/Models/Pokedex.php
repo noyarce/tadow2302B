@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Pokedex extends Model
 {
     use HasFactory;
-    protected $table = "pokedex";
+    protected $table = "pokedexes";
 }
