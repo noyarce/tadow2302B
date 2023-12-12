@@ -61,36 +61,36 @@ class PokemonRepository
     public function listarPokemones($request)
     {
         try {
-          
-           if(isset($request->limit)){
-            $pokemon = Pokemon::with(['region:id,reg_nombre','tipo_uno','tipo_dos'])
-           ->orderBy('num_pokedex','ASC')
-           ->take($request->limit)
-           ->get();
-           }else{ 
-            $pokemon = Pokemon::with(['region:id,reg_nombre','tipo_uno','tipo_dos'])
-           ->orderBy('num_pokedex','ASC')
-           ->get();
+
+            if (isset($request->limit)) {
+                $pokemon = Pokemon::with(['region:id,reg_nombre', 'tipo_uno', 'tipo_dos'])
+                    ->orderBy('num_pokedex', 'ASC')
+                    ->take($request->limit)
+                    ->get();
+            } else {
+                $pokemon = Pokemon::with(['region:id,reg_nombre', 'tipo_uno', 'tipo_dos'])
+                    ->orderBy('num_pokedex', 'ASC')
+                    ->get();
             }
             // $pokemon = Pokemon::where('nombre', 'like', '%'.$request->nombre.'%')
             // ->with(['region:id,reg_nombre','tipo_uno','tipo_dos'])->get();
 
-           // $pokemon= Pokemon::where('num_pokedex', $request->num_pokedex)->get();
-            
-           // $pokemon = Pokemon::whereHas('region', function($q) use($request){
-           //     $q->where('reg_nombre',$request->region);
-           // })
-           // ->with('region:id,reg_nombre')
-           // 
-           // ->get();
-//
-           // $pokemon= Pokemon::when(isset($request->num_pokedex), function($q) use ($request) {
-           //     $q->where('num_pokedex',$request->num_pokedex);
-           // })
-           // ->when(isset($request->nombre), function ($q2) use ($request){
-           //     $q2->where('nombre', 'like', '%'.$request->nombre.'%');
-           // })
-           // ->get();
+            // $pokemon= Pokemon::where('num_pokedex', $request->num_pokedex)->get();
+
+            // $pokemon = Pokemon::whereHas('region', function($q) use($request){
+            //     $q->where('reg_nombre',$request->region);
+            // })
+            // ->with('region:id,reg_nombre')
+            // 
+            // ->get();
+            //
+            // $pokemon= Pokemon::when(isset($request->num_pokedex), function($q) use ($request) {
+            //     $q->where('num_pokedex',$request->num_pokedex);
+            // })
+            // ->when(isset($request->nombre), function ($q2) use ($request){
+            //     $q2->where('nombre', 'like', '%'.$request->nombre.'%');
+            // })
+            // ->get();
 
             //$pokemon = Pokemon::join('regions', 'regions.id', '=','pokemon.region_id')
             //            ->where('reg_nombre',$request->region)
@@ -102,7 +102,7 @@ class PokemonRepository
             //->orwherehas('tipo_dos', function($q2) use($request){
             //    $q2->where('tip_nombre', $request->tipo);
             //})->with(['region:id,reg_nombre','tipo_uno','tipo_dos'])->get();
-            
+
             return response()->json(["pokemon" => $pokemon], Response::HTTP_OK);
         } catch (Exception $e) {
             Log::info([
@@ -149,8 +149,8 @@ class PokemonRepository
     {
         try {
             for ($i = 1; $i <= 9; $i++) {
-              //$this->cargaPokemonPorRegion($i);
-             CargaPokemonesJob::dispatch($i);
+                //$this->cargaPokemonPorRegion($i);
+                CargaPokemonesJob::dispatch($i);
             }
 
             return response()->json(["ok"], Response::HTTP_OK);
@@ -180,30 +180,30 @@ class PokemonRepository
         $region->save();
         foreach ($pokemones['body']['pokemon_species'] as $pokemon) {
 
-            Log::info(["pokemon a revisar "=> $pokemon]);
+            Log::info(["pokemon a revisar " => $pokemon]);
 
             // $pokemon['url'] equivale a : 'https://pokeapi.co/api/v2/pokemon-species/???/'
-            $idPokedex = str_replace('https://pokeapi.co/api/v2/pokemon-species/','', $pokemon['url']);
+            $idPokedex = str_replace('https://pokeapi.co/api/v2/pokemon-species/', '', $pokemon['url']);
             // $idPokedex -> ???/
 
-            $idPokedex= str_replace('/','', $idPokedex);
+            $idPokedex = str_replace('/', '', $idPokedex);
             // $idPokedex -> ??? 
             $pokemonServiceTipo = new PokemonService;
             $pokemonTipo = $pokemonServiceTipo->CargarPokemonIndividual($idPokedex);
 
-            Log::info([" poke x tipo"=> $pokemonTipo['body']['types'][0]['type']['name']]);
-         
+            Log::info([" poke x tipo" => $pokemonTipo['body']['types'][0]['type']['name']]);
+
             $tipoUno = TipoPokemon::where('tip_nombre', $pokemonTipo['body']['types'][0]['type']['name'])->first();
-            if(!$tipoUno){
+            if (!$tipoUno) {
                 $tipoUno = new TipoPokemon();
                 $tipoUno->tip_nombre = $pokemonTipo['body']['types'][0]['type']['name'];
                 $tipoUno->save();
             }
-            if(isset($pokemonTipo['body']['types'][1])){
-                Log::info([" poke x tipo"=> $pokemonTipo['body']['types'][1]['type']['name']]);
+            if (isset($pokemonTipo['body']['types'][1])) {
+                Log::info([" poke x tipo" => $pokemonTipo['body']['types'][1]['type']['name']]);
 
                 $tipoDos = TipoPokemon::where('tip_nombre', $pokemonTipo['body']['types'][1]['type']['name'])->first();
-                if(!$tipoDos){
+                if (!$tipoDos) {
                     $tipoDos = new TipoPokemon();
                     $tipoDos->tip_nombre = $pokemonTipo['body']['types'][1]['type']['name'];
                     $tipoDos->save();
@@ -213,7 +213,7 @@ class PokemonRepository
             $poke = new Pokemon();
             $poke->nombre = $pokemon['name'];
             $poke->region_id = $region->id;
-            $poke->tipo_uno_id =$tipoUno->id;
+            $poke->tipo_uno_id = $tipoUno->id;
             $poke->tipo_dos_id = isset($pokemonTipo['body']['types'][1]) ? $tipoDos->id : null;
             $poke->num_pokedex = (int)$idPokedex;
             $poke->save();
@@ -221,16 +221,15 @@ class PokemonRepository
     }
 
 
-    public function registrarPokedex($request){
+    public function registrarPokedex($request)
+    {
         try {
-
-            $usuario = $request->user();      
-                  Log::info(["usuario"=> $usuario->id]);
-
-           $pokemon = new Pokedex();
-           $pokemon->pokemon_id = $request->pokemon_id;
-           $pokemon->usuario_id = $request->user()->id;
+            $pokemon = new Pokedex();
+            $pokemon->pokemon_id = $request->pokemon_id;
+            $pokemon->usuario_id = $request->user_id;
             $pokemon->save();
+
+
 
             return response()->json(["ok"], Response::HTTP_OK);
         } catch (Exception $e) {
@@ -250,26 +249,41 @@ class PokemonRepository
         }
     }
 
-    public function random($request){
+    public function pokemonRandom($request)
+    {
         try {
-            Log::info(["request"=> $request->user()]);
-           $pokemon= Pokemon::with(['region', 'tipo_uno', 'tipo_dos'])->inRandomOrder()->first(); 
-             return response()->json(["pokemon"=> $pokemon], Response::HTTP_OK);
-         } catch (Exception $e) {
-             Log::info([
-                 "error" => $e->getMessage(),
-                 "linea" => $e->getLine(),
-                 "file" => $e->getFile(),
-                 "metodo" => __METHOD__
-             ]);
- 
-             return response()->json([
-                 "error" => $e->getMessage(),
-                 "linea" => $e->getLine(),
-                 "file" => $e->getFile(),
-                 "metodo" => __METHOD__
-             ], Response::HTTP_BAD_REQUEST);
-         }
-    }
+            /**opcion 1 */
+            $pokm = Pokedex::where('usuario_id', $request->user_id)->pluck('pokemon_id')->toArray();
+            $pokemon = Pokemon::whereNotIn('id', $pokm)
+                ->where('id', '<>', $request->poke_id)->inRandomOrder()->first();
+            /*** opcion 2*/
+            $pokemon = Pokemon::where('id', '<>', $request->poke_id)
+                ->whereBetween('id', [1, 10])
+                ->whereDoesntHave('pokedex', function ($q) use ($request) {
+                    $q->where('usuario_id', $request->user_id);
+                })->inRandomOrder()->first();
 
+            if (!$pokemon) {
+                return response()->json(["no hay mas pokemon"], Response::HTTP_OK);
+            }
+
+        
+
+            return response()->json(["pokemon" => $pokemon], Response::HTTP_OK);
+        } catch (Exception $e) {
+            Log::info([
+                "error" => $e->getMessage(),
+                "linea" => $e->getLine(),
+                "file" => $e->getFile(),
+                "metodo" => __METHOD__
+            ]);
+
+            return response()->json([
+                "error" => $e->getMessage(),
+                "linea" => $e->getLine(),
+                "file" => $e->getFile(),
+                "metodo" => __METHOD__
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
 }

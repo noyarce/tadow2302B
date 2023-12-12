@@ -23,5 +23,7 @@ class Pokemon extends Model
     public function tipo_dos(){
         return $this->belongsTo(TipoPokemon::class, 'tipo_dos_id');
     }
-
+    public function pokedex(){
+        return $this->hasMany(Pokedex::class);
+    }
 }

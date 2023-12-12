@@ -9,4 +9,8 @@ class Pokedex extends Model
 {
     use HasFactory;
     protected $table = "pokedexes";
+
+    public function pokemon(){
+        return $this->belongsTo(Pokemon::class, 'pokemon_id');
+    }
 }

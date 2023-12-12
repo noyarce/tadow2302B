@@ -22,8 +22,9 @@ class PokemonController extends Controller
         return $this->pokemonRepository->actualizarPokemon($request);
      }
 
-     public function listarPokemones(Request $request){
-        return $this->pokemonRepository->listarPokemones($request);
+     public function listarPokemones($id){
+      return ($id);
+      //        return $this->pokemonRepository->listarPokemones($request);
      }
 
      public function EliminarPokemon(ListarPokeRequest $request){
@@ -35,11 +36,14 @@ class PokemonController extends Controller
      }
 
      public function pokeRandom(Request $request) {
-      return $this->pokemonRepository->random($request);
+      return $this->pokemonRepository->pokemonRandom($request);
      }
 
      public function registrarPokedex(Request $request){
       return $this->pokemonRepository->registrarPokedex($request);
+     }
+     public function pokemonRandom(Request $request){
+      return $this->pokemonRepository->pokemonRandom($request);
      }
 }
 
